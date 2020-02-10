@@ -1,19 +1,12 @@
 import React from "react";
-import Head from "next/head";
-import styled from "@emotion/styled";
+import Layout from "../components/layout/Layout";
 
 const Home = () => (
   <div>
-    <Head>
-      <title>Inicio</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-    <Heading>Inicio</Heading>
+    <Layout>
+      <h1>Inicio</h1>
+    </Layout>
   </div>
 );
-
-const Heading = styled.h1`
-  color: red;
-`;
 
 export default Home;
