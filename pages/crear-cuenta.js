@@ -1,31 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/core";
+import Router from "next/router";
 import Layout from "../components/layout/Layout";
-import { Formulario, Campo, InputSubmit } from "../components/ui/Formulario";
+import {
+  Formulario,
+  Campo,
+  InputSubmit,
+  Error,
+  Exito
+} from "../components/ui/Formulario";
+
+//firebase
+import firebase from "../firebase";
 
 //Validaciones
 import useValidacion from "../hooks/useValidacion";
 import validarCrearCuenta from "../validacion/validarCrearCuenta";
 
+const STATE_INICIAL = {
+  nombre: "",
+  email: "",
+  password: ""
+};
 const CrearCuenta = () => {
-  const STATE_INICIAL = {
-    nombre: "",
-    email: "",
-    password: ""
-  };
+  const [error, guardarError] = useState(false);
+  const [exito, guardarExito] = useState(false);
 
   const {
     valores,
     errores,
-    subtmitForm,
     handleSubmit,
-    handleChange
+    handleChange,
+    handleBlur
   } = useValidacion(STATE_INICIAL, validarCrearCuenta, crearCuenta);
 
   const { nombre, email, password } = valores;
 
-  function crearCuenta() {
-    console.log("Creando cuenta...");
+  async function crearCuenta() {
+    try {
+      await firebase.registrar(nombre, email, password);
+      guardarExito("Usuario creado correctamente, redireccionando...");
+      setTimeout(() => {
+        Router.push("/");
+      }, 1000);
+    } catch (error) {
+      console.error("Hubo un error al crear el usuario ", error.message);
+      guardarError(error.message);
+    }
   }
 
   return (
@@ -50,8 +71,10 @@ const CrearCuenta = () => {
                 name="nombre"
                 value={nombre}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
             </Campo>
+            {errores.nombre && <Error>{errores.nombre}</Error>}
             <Campo>
               <label htmlFor="email">Email</label>
               <input
@@ -61,8 +84,10 @@ const CrearCuenta = () => {
                 name="email"
                 value={email}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
             </Campo>
+            {errores.email && <Error>{errores.email}</Error>}
             <Campo>
               <label htmlFor="password">Contraseña</label>
               <input
@@ -72,8 +97,12 @@ const CrearCuenta = () => {
                 name="password"
                 value={password}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
             </Campo>
+            {errores.password && <Error>{errores.password}</Error>}
+            {error && <Error>{error}</Error>}
+            {exito && <Exito>{exito}</Exito>}
             <InputSubmit type="submit" value="Crear Cuenta" />
           </Formulario>
         </>

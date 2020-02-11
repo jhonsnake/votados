@@ -32,12 +32,20 @@ const useValidacion = (stateInicial, validar, fn) => {
     guardarErrores(erroresValidacion);
     guardarSubmitForm(true);
   };
+
+  //Cuando el usuario abandona el input tb valida (blur)
+
+  const handleBlur = () => {
+    const erroresValidacion = validar(valores);
+    guardarErrores(erroresValidacion);
+  };
+
   return {
     valores,
     errores,
-    subtmitForm,
     handleSubmit,
-    handleChange
+    handleChange,
+    handleBlur
   };
 };
 

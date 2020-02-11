@@ -35,3 +35,27 @@ export const InputSubmit = styled.input`
     cursor: pointer;
   }
 `;
+
+export const Error = styled.p`
+  background-color: red;
+  padding: 1rem;
+  font-family: "PT Sans", sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 2rem 0;
+`;
+
+export const Exito = styled.p`
+  background-color: aquamarine;
+  padding: 1rem;
+  font-family: "PT Sans", sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: black;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 2rem 0;
+`;
