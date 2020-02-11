@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import Buscar from "../ui/Buscar";
-import Navegacion from "./Navegacion";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
+import Buscar from "../ui/Buscar";
+import Navegacion from "./Navegacion";
+import Boton from "../ui/Boton";
 
 const ContenedorHeader = styled.div`
   max-width: 1200px;
@@ -25,37 +26,65 @@ const Logo = styled.a`
   cursor: pointer;
 `;
 
-const Header = () => (
-  <div>
-    <header
-      css={css`
-        border-bottom: solid 2px var(--gris3);
-        padding: 1rem 0;
-        margin-top: 2rem;
-      `}
-    >
-      <ContenedorHeader>
-        <div>
-          <Link href="/">
-            <Logo>Votados</Logo>
-          </Link>
+const Header = () => {
+  const usuario = false;
+  return (
+    <div>
+      <header
+        css={css`
+          border-bottom: solid 2px var(--gris3);
+          padding: 1rem 0;
+          margin-top: 2rem;
+        `}
+      >
+        <ContenedorHeader>
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+            `}
+          >
+            <Link href="/">
+              <Logo>Votados</Logo>
+            </Link>
 
-          <Buscar />
-          <Navegacion />
-        </div>
-        <div>
-          <p>Hola: John</p>
-          <button type="button">Cerrar sesión</button>
-          <Link href="/">
-            <a>Login </a>
-          </Link>
-          <Link href="/">
-            <a>Crear cuenta </a>
-          </Link>
-        </div>
-      </ContenedorHeader>
-    </header>
-  </div>
-);
+            <Buscar />
+            <Navegacion />
+          </div>
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+            `}
+          >
+            {usuario ? (
+              <>
+                <p
+                  css={css`
+                    margin-right: 2rem;
+                  `}
+                >
+                  Hola: John
+                </p>
+                <Link href="/">
+                  <Boton bgColor="true">Cerrar Sesión</Boton>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Boton bgColor="true">Login </Boton>
+                </Link>
+                <Link href="/crear-cuenta">
+                  <Boton>Crear cuenta </Boton>
+                </Link>
+              </>
+            )}
+          </div>
+        </ContenedorHeader>
+      </header>
+    </div>
+  );
+};
 
 export default Header;
