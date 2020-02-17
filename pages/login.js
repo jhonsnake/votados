@@ -23,7 +23,6 @@ const STATE_INICIAL = {
 };
 const Login = () => {
   const [error, guardarError] = useState(false);
-  const [exito, guardarExito] = useState(false);
 
   const {
     valores,
@@ -37,7 +36,8 @@ const Login = () => {
 
   async function iniciarSesion() {
     try {
-      await firebase.login(email, password);
+      const usuario = await firebase.login(email, password);
+
       Router.push("/");
     } catch (error) {
       console.error("Hubo un error al autenticar el usuario ", error.message);
@@ -85,7 +85,7 @@ const Login = () => {
             </Campo>
             {errores.password && <Error>{errores.password}</Error>}
             {error && <Error>{error}</Error>}
-            {exito && <Exito>{exito}</Exito>}
+
             <InputSubmit type="submit" value="Iniciar Sesión" />
           </Formulario>
         </>

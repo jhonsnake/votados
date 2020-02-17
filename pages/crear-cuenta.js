@@ -34,7 +34,7 @@ const CrearCuenta = () => {
     handleBlur
   } = useValidacion(STATE_INICIAL, validarCrearCuenta, crearCuenta);
 
-  const { nombre, email, password } = valores;
+  const { nombre, email, password, rol } = valores;
 
   async function crearCuenta() {
     try {
