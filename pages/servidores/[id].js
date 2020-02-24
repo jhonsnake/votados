@@ -19,9 +19,20 @@ const ContenedorServidor = styled.div`
   }
 `;
 
+const CreadorServidor = styled.p`
+  padding: 0.5rem 2rem;
+  background-color: #da552f;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+`;
+
 const Avatar = styled.img`
   margin: 0 auto;
   display: block;
+  max-height: 160px;
 `;
 
 const Votacion = styled.div`
@@ -78,10 +89,26 @@ const BotonVotar = styled.button`
   }
 `;
 
+const Gif = styled.img`
+  margin: 0 auto;
+  z-index: 999;
+  margin-top: -160px;
+  width: 160px;
+  height: 160px;
+  display: block;
+`;
+
 function Servidor() {
   //state del componente
   const [servidor, guardarServidor] = useState({});
   const [error, guardarError] = useState(false);
+  const [ejecutarGif, setEjecutarGif] = useState({
+    play: false,
+    url: ""
+  });
+
+  const [comentario, guardarComentario] = useState({});
+  const [consultarDB, guardarConsultarDB] = useState(true);
 
   //context del firebase
   const { firebase, usuario } = useContext(FirebaseContext);
@@ -93,8 +120,9 @@ function Servidor() {
   const scrollToRef = ref => window.scrollTo(0, ref.current.offsetTop);
   const servidorAvatar = useRef();
   const AudioBooRef = useRef();
+  const AudioAplausosRef = useRef();
   useEffect(() => {
-    if (id) {
+    if (id && consultarDB) {
       const obtenerServidor = async () => {
         const productoQuery = await firebase.db
           .collection("servidores")
@@ -102,15 +130,17 @@ function Servidor() {
         const servidor = await productoQuery.get();
         if (servidor.exists) {
           guardarServidor(servidor.data());
+          guardarConsultarDB(false);
         } else {
           guardarError(true);
+          guardarConsultarDB(false);
         }
       };
       obtenerServidor();
     }
-  }, [id, servidor]);
+  }, [id]);
 
-  if (Object.keys(servidor).length === 0) return <p>Cargando...</p>;
+  if (!error && Object.keys(servidor).length === 0) return <p>Cargando...</p>;
   const {
     nombre,
     ciudad,
@@ -154,6 +184,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoSalud.includes(usuario.uid)) return;
+    lanzarAplauso();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoSalud = [...haVotadoSalud, usuario.uid];
 
@@ -170,6 +201,7 @@ function Servidor() {
       ...servidor,
       votos_salud_mas: totalSaludMas
     });
+    guardarConsultarDB(true);
   };
 
   const VotarSaludMenos = () => {
@@ -181,6 +213,8 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoSalud.includes(usuario.uid)) return;
+    lanzarTomate();
+
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoSalud = [...haVotadoSalud, usuario.uid];
 
@@ -197,6 +231,7 @@ function Servidor() {
       ...servidor,
       votos_salud_menos: totalSaludMenos
     });
+    guardarConsultarDB(true);
   };
 
   //EDUCACIÓN
@@ -210,6 +245,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoEducacion.includes(usuario.uid)) return;
+    lanzarAplauso();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoEducacion = [...haVotadoEducacion, usuario.uid];
 
@@ -226,6 +262,7 @@ function Servidor() {
       ...servidor,
       votos_educacion_mas: totalEducacionMas
     });
+    guardarConsultarDB(true);
   };
 
   const VotarEducacionMenos = () => {
@@ -237,6 +274,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoEducacion.includes(usuario.uid)) return;
+    lanzarTomate();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoEducacion = [...haVotadoEducacion, usuario.uid];
 
@@ -253,6 +291,7 @@ function Servidor() {
       ...servidor,
       votos_educacion_menos: totalEducacionMenos
     });
+    guardarConsultarDB(true);
   };
 
   //INFRAESTRUCTURA
@@ -266,6 +305,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoInfraestructura.includes(usuario.uid)) return;
+    lanzarAplauso();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoInfraestructura = [
       ...haVotadoInfraestructura,
@@ -285,6 +325,7 @@ function Servidor() {
       ...servidor,
       votos_infraestructura_mas: totalInfraestructuraMas
     });
+    guardarConsultarDB(true);
   };
 
   const VotarInfraestructuraMenos = () => {
@@ -296,6 +337,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoInfraestructura.includes(usuario.uid)) return;
+    lanzarTomate();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoInfraestructura = [
       ...haVotadoInfraestructura,
@@ -315,6 +357,7 @@ function Servidor() {
       ...servidor,
       votos_infraestructura_menos: totalInfraestructuraMenos
     });
+    guardarConsultarDB(true);
   };
   //VIVIENDA
 
@@ -327,6 +370,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoVivienda.includes(usuario.uid)) return;
+    lanzarAplauso();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoVivienda = [...haVotadoVivienda, usuario.uid];
 
@@ -343,6 +387,7 @@ function Servidor() {
       ...servidor,
       votos_vivienda_mas: totalViviendaMas
     });
+    guardarConsultarDB(true);
   };
 
   const VotarViviendaMenos = () => {
@@ -354,6 +399,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoVivienda.includes(usuario.uid)) return;
+    lanzarTomate();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoVivienda = [...haVotadoVivienda, usuario.uid];
 
@@ -370,6 +416,7 @@ function Servidor() {
       ...servidor,
       votos_vivienda_menos: totalViviendaMenos
     });
+    guardarConsultarDB(true);
   };
   //CULTURA
 
@@ -382,6 +429,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoCultura.includes(usuario.uid)) return;
+    lanzarAplauso();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoCultura = [...haVotadoCultura, usuario.uid];
 
@@ -398,6 +446,7 @@ function Servidor() {
       ...servidor,
       votos_cultura_mas: totalCulturaMas
     });
+    guardarConsultarDB(true);
   };
 
   const VotarCulturaMenos = () => {
@@ -409,6 +458,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoCultura.includes(usuario.uid)) return;
+    lanzarTomate();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoCultura = [...haVotadoCultura, usuario.uid];
 
@@ -425,6 +475,7 @@ function Servidor() {
       ...servidor,
       votos_cultura_menos: totalCulturaMenos
     });
+    guardarConsultarDB(true);
   };
 
   //CORRUPCION
@@ -438,6 +489,7 @@ function Servidor() {
 
     //Verificar si el usuario actual ha votado
     if (haVotadoCorrupcion.includes(usuario.uid)) return;
+    lanzarTomate();
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoCorrupcion = [...haVotadoCorrupcion, usuario.uid];
 
@@ -454,254 +506,413 @@ function Servidor() {
       ...servidor,
       votos_corrupcion_menos: totalCorrupcionMenos
     });
+    guardarConsultarDB(true);
   };
 
-  function setScroll() {
+  function lanzarTomate() {
     scrollToRef(servidorAvatar);
     if (!AudioBooRef) {
       return;
     }
     AudioBooRef.current.currentTime = 0;
     AudioBooRef.current.play();
+    setEjecutarGif({
+      play: false,
+      url: ""
+    });
+    setEjecutarGif({
+      play: true,
+      url: "/static/img/tomatogif.gif?a=" + Math.random()
+    });
   }
+
+  function lanzarAplauso() {
+    scrollToRef(servidorAvatar);
+    if (!AudioAplausosRef) {
+      return;
+    }
+    AudioAplausosRef.current.currentTime = 0;
+    AudioAplausosRef.current.play();
+    setEjecutarGif({
+      play: false,
+      url: ""
+    });
+    setEjecutarGif({
+      play: true,
+      url: "/static/img/aplausosgif.gif?a=" + Math.random()
+    });
+
+    setTimeout(() => {
+      setEjecutarGif({
+        play: false,
+        url: ""
+      });
+    }, 5000);
+  }
+
+  //Crear comentarios
+
+  const comentarioChange = e => {
+    guardarComentario({
+      ...comentario,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  //Identifica si el comentario pertenece al creador del producto
+
+  const esCreador = id => {
+    if (creador.id == id) {
+      return true;
+    }
+  };
+
+  const agregarComentario = e => {
+    e.preventDefault();
+    if (!usuario) {
+      return router.push("/login");
+    }
+
+    // Información extra al comentario
+    comentario.usuarioId = usuario.uid;
+    comentario.usuarioNombre = usuario.displayName;
+
+    // Tomar copia de comentarios y agregarlos al arreglo
+
+    const nuevosComentarios = [...comentarios, comentario];
+
+    //Actualizar BD
+    firebase.db
+      .collection("servidores")
+      .doc(id)
+      .update({
+        comentarios: nuevosComentarios
+      });
+
+    //Actualizar State
+    guardarServidor({ ...servidor, comentarios: nuevosComentarios });
+    guardarConsultarDB(true);
+  };
+
+  //funcion que revisa que el creador del producto sea el mismo autenticado
+
+  const puedeBorrar = () => {
+    if (!usuario) return false;
+    if (creador.id === usuario.uid) {
+      return true;
+    }
+  };
+
+  //elimina un servidor de la BD.
+
+  const eliminarServidor = async () => {
+    if (!usuario) {
+      return router.push("/login");
+    }
+    if (creador.id !== usuario.uid) {
+      return router.push("/login");
+    }
+    try {
+      await firebase.db
+        .collection("servidores")
+        .doc(id)
+        .delete();
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Layout>
       <audio ref={AudioBooRef} src="/static/sounds/boo.mp3"></audio>
+      <audio ref={AudioAplausosRef} src="/static/sounds/aplausos.mp3"></audio>
       <>
-        <h1>{error && <Error404 />}</h1>
-        <div className="contenedor">
-          <h1
-            css={css`
-              text-align: center;
-              margin-top: 5rem;
-            `}
-          >
-            {nombre}
-          </h1>
-          <h3
-            css={css`
-              text-align: center;
-              margin-top: -2rem;
-            `}
-          >
-            {tipo} {ciudad && ciudad} {departamento && departamento}
-            {partido && " - " + partido}
-          </h3>
+        <div>
+          {error ? (
+            <Error404 />
+          ) : (
+            <div className="contenedor">
+              <h1
+                css={css`
+                  text-align: center;
+                  margin-top: 5rem;
+                `}
+              >
+                {nombre}
+              </h1>
+              <h3
+                css={css`
+                  text-align: center;
+                  margin-top: -2rem;
+                `}
+              >
+                {tipo} {ciudad && ciudad} {departamento && departamento}
+                {partido && " - " + partido}
+              </h3>
 
-          <ContenedorServidor>
-            <div ref={servidorAvatar}>
-              <p>
-                Publicado hace:{" "}
-                {formatDistanceToNow(new Date(creado), { locale: es })}
-              </p>
-              <p>Por: {creador.nombre}</p>
-              <Avatar src={urlimagen} />
-              <p>{descripcion}</p>
-
-              <VotosContenedor>
-                <CategoryContainer>
-                  <h4>Salud</h4>
-                  <IconoVotacion src="/static/img/salud.png" alt="categoria" />
-                  <ContainerButtons>
-                    <div>
-                      <ConteoVotos color="green">{votos_salud_mas}</ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarSaludMas}
-                        icon={"/static/img/aplauso.png"}
-                      ></BotonVotar>
-                    </div>
-                    <div>
-                      <ConteoVotos color="red">{votos_salud_menos}</ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarSaludMenos}
-                        icon={"/static/img/tomate.png"}
-                      ></BotonVotar>
-                    </div>
-                  </ContainerButtons>
-                </CategoryContainer>
-                <CategoryContainer>
-                  <h4>Educación</h4>
-                  <IconoVotacion
-                    src="/static/img/educacion.png"
-                    alt="categoria"
-                  />
-                  <ContainerButtons>
-                    <div>
-                      <ConteoVotos color="green">
-                        {votos_educacion_mas}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarEducacionMas}
-                        icon={"/static/img/aplauso.png"}
-                      ></BotonVotar>
-                    </div>
-                    <div>
-                      <ConteoVotos color="red">
-                        {votos_educacion_menos}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarEducacionMenos}
-                        icon={"/static/img/tomate.png"}
-                      ></BotonVotar>
-                    </div>
-                  </ContainerButtons>
-                </CategoryContainer>
-                <CategoryContainer>
-                  <h4>Infraestructura</h4>
-                  <IconoVotacion
-                    src="/static/img/infraestructura.png"
-                    alt="categoria"
-                  />
-                  <ContainerButtons>
-                    <div>
-                      <ConteoVotos color="green">
-                        {votos_infraestructura_mas}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarInfraestructuraMas}
-                        icon={"/static/img/aplauso.png"}
-                      ></BotonVotar>
-                    </div>
-                    <div>
-                      <ConteoVotos color="red">
-                        {votos_infraestructura_menos}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarInfraestructuraMenos}
-                        icon={"/static/img/tomate.png"}
-                      ></BotonVotar>
-                    </div>
-                  </ContainerButtons>
-                </CategoryContainer>
-                <CategoryContainer>
-                  <h4>Vivienda</h4>
-                  <IconoVotacion
-                    src="/static/img/vivienda.png"
-                    alt="categoria"
-                  />
-                  <ContainerButtons>
-                    <div>
-                      <ConteoVotos color="green">
-                        {votos_vivienda_mas}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarViviendaMas}
-                        icon={"/static/img/aplauso.png"}
-                      ></BotonVotar>
-                    </div>
-                    <div>
-                      <ConteoVotos color="red">
-                        {votos_vivienda_menos}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarViviendaMenos}
-                        icon={"/static/img/tomate.png"}
-                      ></BotonVotar>
-                    </div>
-                  </ContainerButtons>
-                </CategoryContainer>
-                <CategoryContainer>
-                  <h4>Cultura</h4>
-                  <IconoVotacion
-                    src="/static/img/cultura.png"
-                    alt="categoria"
-                  />
-                  <ContainerButtons>
-                    <div>
-                      <ConteoVotos color="green">
-                        {votos_cultura_mas}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarCulturaMas}
-                        icon={"/static/img/aplauso.png"}
-                      ></BotonVotar>
-                    </div>
-                    <div>
-                      <ConteoVotos color="red">
-                        {votos_cultura_menos}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarCulturaMenos}
-                        icon={"/static/img/tomate.png"}
-                      ></BotonVotar>
-                    </div>
-                  </ContainerButtons>
-                </CategoryContainer>
-                <CategoryContainer>
-                  <h4>Corrupción</h4>
-                  <IconoVotacion
-                    src="/static/img/corrupcion.png"
-                    alt="categoria"
-                  />
-                  <ContainerButtons>
-                    <div>
-                      <ConteoVotos color="red">
-                        {votos_corrupcion_menos}
-                      </ConteoVotos>
-                      <BotonVotar
-                        onClick={VotarCorrupcionMenos}
-                        icon={"/static/img/tomate.png"}
-                      ></BotonVotar>
-                    </div>
-                  </ContainerButtons>
-                </CategoryContainer>
+              <ContenedorServidor>
+                <div ref={servidorAvatar}>
+                  <p>
+                    Publicado hace:{" "}
+                    {formatDistanceToNow(new Date(creado), { locale: es })}
+                  </p>
+                  <p>Por: {creador.nombre}</p>
+                  <Avatar src={urlimagen} />
+                  {ejecutarGif.play && <Gif src={ejecutarGif.url} />}
+                  <p>{descripcion}</p>
+                  <VotosContenedor>
+                    <CategoryContainer>
+                      <h4>Salud</h4>
+                      <IconoVotacion
+                        src="/static/img/salud.png"
+                        alt="categoria"
+                      />
+                      <ContainerButtons>
+                        <div>
+                          <ConteoVotos color="green">
+                            {votos_salud_mas}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarSaludMas}
+                            icon={"/static/img/aplauso.png"}
+                          ></BotonVotar>
+                        </div>
+                        <div>
+                          <ConteoVotos color="red">
+                            {votos_salud_menos}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarSaludMenos}
+                            icon={"/static/img/tomate.png"}
+                          ></BotonVotar>
+                        </div>
+                      </ContainerButtons>
+                    </CategoryContainer>
+                    <CategoryContainer>
+                      <h4>Educación</h4>
+                      <IconoVotacion
+                        src="/static/img/educacion.png"
+                        alt="categoria"
+                      />
+                      <ContainerButtons>
+                        <div>
+                          <ConteoVotos color="green">
+                            {votos_educacion_mas}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarEducacionMas}
+                            icon={"/static/img/aplauso.png"}
+                          ></BotonVotar>
+                        </div>
+                        <div>
+                          <ConteoVotos color="red">
+                            {votos_educacion_menos}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarEducacionMenos}
+                            icon={"/static/img/tomate.png"}
+                          ></BotonVotar>
+                        </div>
+                      </ContainerButtons>
+                    </CategoryContainer>
+                    <CategoryContainer>
+                      <h4>Infraestructura</h4>
+                      <IconoVotacion
+                        src="/static/img/infraestructura.png"
+                        alt="categoria"
+                      />
+                      <ContainerButtons>
+                        <div>
+                          <ConteoVotos color="green">
+                            {votos_infraestructura_mas}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarInfraestructuraMas}
+                            icon={"/static/img/aplauso.png"}
+                          ></BotonVotar>
+                        </div>
+                        <div>
+                          <ConteoVotos color="red">
+                            {votos_infraestructura_menos}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarInfraestructuraMenos}
+                            icon={"/static/img/tomate.png"}
+                          ></BotonVotar>
+                        </div>
+                      </ContainerButtons>
+                    </CategoryContainer>
+                    <CategoryContainer>
+                      <h4>Vivienda</h4>
+                      <IconoVotacion
+                        src="/static/img/vivienda.png"
+                        alt="categoria"
+                      />
+                      <ContainerButtons>
+                        <div>
+                          <ConteoVotos color="green">
+                            {votos_vivienda_mas}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarViviendaMas}
+                            icon={"/static/img/aplauso.png"}
+                          ></BotonVotar>
+                        </div>
+                        <div>
+                          <ConteoVotos color="red">
+                            {votos_vivienda_menos}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarViviendaMenos}
+                            icon={"/static/img/tomate.png"}
+                          ></BotonVotar>
+                        </div>
+                      </ContainerButtons>
+                    </CategoryContainer>
+                    <CategoryContainer>
+                      <h4>Cultura</h4>
+                      <IconoVotacion
+                        src="/static/img/cultura.png"
+                        alt="categoria"
+                      />
+                      <ContainerButtons>
+                        <div>
+                          <ConteoVotos color="green">
+                            {votos_cultura_mas}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarCulturaMas}
+                            icon={"/static/img/aplauso.png"}
+                          ></BotonVotar>
+                        </div>
+                        <div>
+                          <ConteoVotos color="red">
+                            {votos_cultura_menos}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarCulturaMenos}
+                            icon={"/static/img/tomate.png"}
+                          ></BotonVotar>
+                        </div>
+                      </ContainerButtons>
+                    </CategoryContainer>
+                    <CategoryContainer>
+                      <h4>Corrupción</h4>
+                      <IconoVotacion
+                        src="/static/img/corrupcion.png"
+                        alt="categoria"
+                      />
+                      <ContainerButtons>
+                        <div>
+                          <ConteoVotos color="red">
+                            {votos_corrupcion_menos}
+                          </ConteoVotos>
+                          <BotonVotar
+                            onClick={VotarCorrupcionMenos}
+                            icon={"/static/img/tomate.png"}
+                          ></BotonVotar>
+                        </div>
+                      </ContainerButtons>
+                    </CategoryContainer>
+                    {/* <button
+                  css={css`
+                    display: block;
+                    width: 100%;
+                  `}
+                  onClick={lanzarTomate}
+                >
+                  TOMATE
+                </button>
                 <button
                   css={css`
                     display: block;
                     width: 100%;
                   `}
-                  onClick={setScroll}
+                  onClick={lanzarAplauso}
                 >
-                  TEST
-                </button>
-              </VotosContenedor>
-              <div
-                css={css`
-                  margin-top: 30px;
-                `}
-              >
-                <Grafica servidor={servidor} />
-              </div>
-            </div>
-            <aside>
-              {url && (
-                <Boton target="_blank" bgColor="true" href={url}>
-                  Visitar URL
-                </Boton>
-              )}
-              {usuario && (
-                <>
-                  <h2
+                  APLAUSO
+                </button> */}
+                  </VotosContenedor>
+                  <div
                     css={css`
-                      margin-top: 40px;
+                      margin-top: 30px;
                     `}
                   >
-                    Agrega tu comentario
+                    <Grafica servidor={servidor} />
+                  </div>
+                </div>
+                <aside>
+                  {url && (
+                    <Boton target="_blank" bgColor="true" href={url}>
+                      Visitar URL
+                    </Boton>
+                  )}
+                  {usuario && (
+                    <>
+                      <h2
+                        css={css`
+                          margin-top: 40px;
+                        `}
+                      >
+                        Agrega tu comentario
+                      </h2>
+                      <form onSubmit={agregarComentario}>
+                        <Campo>
+                          <input
+                            type="text"
+                            name="mensaje"
+                            onChange={comentarioChange}
+                          />
+                        </Campo>
+                        <InputSubmit type="submit" value="Agregar Comentario" />
+                      </form>
+                    </>
+                  )}
+                  <h2
+                    css={css`
+                      margin: 2rem 0;
+                    `}
+                  >
+                    Comentarios
                   </h2>
-                  <form>
-                    <Campo>
-                      <input type="text" name="mensaje" />
-                    </Campo>
-                    <InputSubmit type="submit" value="Agregar Comentario" />
-                  </form>
-                </>
+                  {comentarios.length === 0 ? (
+                    "Aún no hay comentarios"
+                  ) : (
+                    <ul>
+                      {comentarios.map((comentario, i) => (
+                        <li
+                          key={`${comentario.usuarioId}-${i}`}
+                          css={css`
+                            border: 1px solid #e1e1e1;
+                            padding: 2rem;
+                          `}
+                        >
+                          <p>{comentario.mensaje}</p>
+                          <p>
+                            Escrito por{" "}
+                            <span
+                              css={css`
+                                font-weight: bold;
+                              `}
+                            >
+                              {comentario.usuarioNombre}
+                            </span>
+                          </p>
+                          {esCreador(comentario.usuarioId) && (
+                            <CreadorServidor>Administrador</CreadorServidor>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </aside>
+              </ContenedorServidor>
+              {puedeBorrar() && (
+                <Boton onClick={eliminarServidor}>Eliminar Servidor</Boton>
               )}
-              <h2
-                css={css`
-                  margin: 2rem 0;
-                `}
-              >
-                Comentarios
-              </h2>
-              {comentarios.map(comentario => (
-                <li>
-                  <p>{comentario.nombre}</p>
-                  <p>Escrito por {comentario.usuarioNombre}</p>
-                </li>
-              ))}
-            </aside>
-          </ContenedorServidor>
+            </div>
+          )}
         </div>
       </>
     </Layout>

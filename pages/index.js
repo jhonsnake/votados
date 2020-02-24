@@ -1,32 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React from "react";
 import Layout from "../components/layout/Layout";
-import { FirebaseContext } from "../firebase";
 import DetallesProducto from "../components/layout/DetallesProducto";
+import useServidores from "../hooks/userServidores";
 
 const Home = () => {
-  const [servidoresPublicos, guardarServidoresPublicos] = useState([]);
-  const { firebase } = useContext(FirebaseContext);
+  const { servidoresPublicos } = useServidores("nombre", "asc");
 
-  useEffect(() => {
-    const obtenerServidores = () => {
-      firebase.db
-        .collection("servidores")
-        .orderBy("nombre", "desc")
-        .onSnapshot(manejarSnapshot);
-    };
-    obtenerServidores();
-  }, []);
-
-  function manejarSnapshot(snapshot) {
-    const servidores = snapshot.docs.map(doc => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      };
-    });
-
-    guardarServidoresPublicos(servidores);
-  }
   return (
     <div>
       <Layout>

@@ -26,7 +26,7 @@ function Navegacion() {
         <a>Inicio</a>
       </Link>
       <Link href="/populares">
-        <a>Populares</a>
+        <a>Mas tomates</a>
       </Link>
       {usuario && (
         <Link href="/agregar-servidor">
