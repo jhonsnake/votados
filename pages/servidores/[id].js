@@ -9,6 +9,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { es } from "date-fns/locale";
 import { Campo, InputSubmit } from "../../components/ui/Formulario";
 import Boton from "../../components/ui/Boton";
+import Grafica from "../../components/ui/Grafica";
 
 const ContenedorServidor = styled.div`
   @media (min-width: 768px) {
@@ -116,6 +117,7 @@ function Servidor() {
     urlimagen,
     descripcion,
     tipo,
+    partido,
     votos_salud_mas,
     votos_salud_menos,
     votos_educacion_mas,
@@ -472,6 +474,7 @@ function Servidor() {
             `}
           >
             {tipo} {ciudad && ciudad} {departamento && departamento}
+            {partido && " - " + partido}
           </h3>
 
           <ContenedorServidor>
@@ -632,6 +635,13 @@ function Servidor() {
                   </ContainerButtons>
                 </CategoryContainer>
               </VotosContenedor>
+              <div
+                css={css`
+                  margin-top: 30px;
+                `}
+              >
+                <Grafica servidor={servidor} />
+              </div>
             </div>
             <aside>
               {url && (
