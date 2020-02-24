@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { FirebaseContext } from "../../firebase";
 import Layout from "../../components/layout/Layout";
@@ -90,7 +90,9 @@ function Servidor() {
   const {
     query: { id }
   } = router;
-
+  const scrollToRef = ref => window.scrollTo(0, ref.current.offsetTop);
+  const servidorAvatar = useRef();
+  const AudioBooRef = useRef();
   useEffect(() => {
     if (id) {
       const obtenerServidor = async () => {
@@ -454,8 +456,18 @@ function Servidor() {
     });
   };
 
+  function setScroll() {
+    scrollToRef(servidorAvatar);
+    if (!AudioBooRef) {
+      return;
+    }
+    AudioBooRef.current.currentTime = 0;
+    AudioBooRef.current.play();
+  }
+
   return (
     <Layout>
+      <audio ref={AudioBooRef} src="/static/sounds/boo.mp3"></audio>
       <>
         <h1>{error && <Error404 />}</h1>
         <div className="contenedor">
@@ -478,7 +490,7 @@ function Servidor() {
           </h3>
 
           <ContenedorServidor>
-            <div>
+            <div ref={servidorAvatar}>
               <p>
                 Publicado hace:{" "}
                 {formatDistanceToNow(new Date(creado), { locale: es })}
@@ -634,6 +646,15 @@ function Servidor() {
                     </div>
                   </ContainerButtons>
                 </CategoryContainer>
+                <button
+                  css={css`
+                    display: block;
+                    width: 100%;
+                  `}
+                  onClick={setScroll}
+                >
+                  TEST
+                </button>
               </VotosContenedor>
               <div
                 css={css`
