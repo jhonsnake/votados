@@ -29,6 +29,43 @@ const Logo = styled.a`
 
 const Header = () => {
   const { firebase, usuario } = useContext(FirebaseContext);
+
+  const checkUser = () => {
+    if (usuario && usuario.emailVerified) {
+      return (
+        <>
+          <p
+            css={css`
+              margin-right: 2rem;
+            `}
+          >
+            Hola: {usuario.displayName}
+          </p>
+          <Link href="/">
+            <Boton bgColor="true" onClick={() => firebase.cerrarSesion()}>
+              Cerrar Sesión
+            </Boton>
+          </Link>
+        </>
+      );
+    } else if (usuario && !usuario.emailVerified) {
+      return <p>Por favor verifique su correo para votar</p>;
+    }
+
+    if (!usuario) {
+      return (
+        <>
+          <Link href="/login">
+            <Boton bgColor="true">Login </Boton>
+          </Link>
+          <Link href="/crear-cuenta">
+            <Boton>Crear cuenta </Boton>
+          </Link>
+        </>
+      );
+    }
+  };
+
   return (
     <div>
       <header
@@ -58,31 +95,7 @@ const Header = () => {
               align-items: center;
             `}
           >
-            {usuario ? (
-              <>
-                <p
-                  css={css`
-                    margin-right: 2rem;
-                  `}
-                >
-                  Hola: {usuario.displayName}
-                </p>
-                <Link href="/">
-                  <Boton bgColor="true" onClick={() => firebase.cerrarSesion()}>
-                    Cerrar Sesión
-                  </Boton>
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link href="/login">
-                  <Boton bgColor="true">Login </Boton>
-                </Link>
-                <Link href="/crear-cuenta">
-                  <Boton>Crear cuenta </Boton>
-                </Link>
-              </>
-            )}
+            {checkUser()}
           </div>
         </ContenedorHeader>
       </header>

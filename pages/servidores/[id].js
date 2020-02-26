@@ -179,6 +179,11 @@ function Servidor() {
     if (!usuario) {
       return router.push("/login");
     }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
+    }
+
     //obtener y sumar votos salud
     const totalSaludMas = votos_salud_mas + 1;
 
@@ -207,6 +212,10 @@ function Servidor() {
   const VotarSaludMenos = () => {
     if (!usuario) {
       return router.push("/login");
+    }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
     }
     //obtener y sumar votos salud
     const totalSaludMenos = votos_salud_menos + 1;
@@ -240,6 +249,10 @@ function Servidor() {
     if (!usuario) {
       return router.push("/login");
     }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
+    }
     //obtener y sumar votos salud
     const totalEducacionMas = votos_educacion_mas + 1;
 
@@ -268,6 +281,10 @@ function Servidor() {
   const VotarEducacionMenos = () => {
     if (!usuario) {
       return router.push("/login");
+    }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
     }
     //obtener y sumar votos Educacion
     const totalEducacionMenos = votos_educacion_menos + 1;
@@ -300,6 +317,10 @@ function Servidor() {
     if (!usuario) {
       return router.push("/login");
     }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
+    }
     //obtener y sumar votos salud
     const totalInfraestructuraMas = votos_infraestructura_mas + 1;
 
@@ -331,6 +352,10 @@ function Servidor() {
   const VotarInfraestructuraMenos = () => {
     if (!usuario) {
       return router.push("/login");
+    }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
     }
     //obtener y sumar votos Infraestructura
     const totalInfraestructuraMenos = votos_infraestructura_menos + 1;
@@ -365,6 +390,10 @@ function Servidor() {
     if (!usuario) {
       return router.push("/login");
     }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
+    }
     //obtener y sumar votos salud
     const totalViviendaMas = votos_vivienda_mas + 1;
 
@@ -393,6 +422,10 @@ function Servidor() {
   const VotarViviendaMenos = () => {
     if (!usuario) {
       return router.push("/login");
+    }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
     }
     //obtener y sumar votos Vivienda
     const totalViviendaMenos = votos_vivienda_menos + 1;
@@ -424,6 +457,10 @@ function Servidor() {
     if (!usuario) {
       return router.push("/login");
     }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
+    }
     //obtener y sumar votos salud
     const totalCulturaMas = votos_cultura_mas + 1;
 
@@ -452,6 +489,10 @@ function Servidor() {
   const VotarCulturaMenos = () => {
     if (!usuario) {
       return router.push("/login");
+    }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
     }
     //obtener y sumar votos Cultura
     const totalCulturaMenos = votos_cultura_menos + 1;
@@ -483,6 +524,10 @@ function Servidor() {
   const VotarCorrupcionMenos = () => {
     if (!usuario) {
       return router.push("/login");
+    }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
     }
     //obtener y sumar votos Corrupcion
     const totalCorrupcionMenos = votos_corrupcion_menos + 1;
@@ -573,6 +618,10 @@ function Servidor() {
       return router.push("/login");
     }
 
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
+    }
+
     // Información extra al comentario
     comentario.usuarioId = usuario.uid;
     comentario.usuarioNombre = usuario.displayName;
@@ -608,6 +657,10 @@ function Servidor() {
   const eliminarServidor = async () => {
     if (!usuario) {
       return router.push("/login");
+    }
+
+    if (usuario && !usuario.emailVerified) {
+      return router.push("/verificar-correo");
     }
     if (creador.id !== usuario.uid) {
       return router.push("/login");

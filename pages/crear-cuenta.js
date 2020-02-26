@@ -39,10 +39,12 @@ const CrearCuenta = () => {
   async function crearCuenta() {
     try {
       await firebase.registrar(nombre, email, password);
-      guardarExito("Usuario creado correctamente, redireccionando...");
+      guardarExito(
+        "Usuario creado correctamente, por favor verifique su correo haciendo click en el link que le hemos enviado, redireccionando..."
+      );
       setTimeout(() => {
         Router.push("/");
-      }, 1000);
+      }, 5000);
     } catch (error) {
       console.error("Hubo un error al crear el usuario ", error.message);
       guardarError(error.message);

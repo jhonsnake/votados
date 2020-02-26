@@ -6,7 +6,10 @@ function useAtenticacion() {
   useEffect(() => {
     const unsuscribe = firebase.auth.onAuthStateChanged(usuario => {
       if (usuario) {
-        guardarUsuarioAutenticado(usuario);
+        usuario.sendEmailVerification();
+        if (usuario.emailVerified) {
+          guardarUsuarioAutenticado(usuario);
+        }
       } else {
         guardarUsuarioAutenticado(null);
       }
