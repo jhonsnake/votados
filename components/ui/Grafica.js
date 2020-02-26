@@ -96,7 +96,7 @@ const Grafica = ({ servidor }) => {
 
   return (
     <div>
-      <h2>Resultados Buena Gestión vs Buena Mala</h2>
+      <h2>Resultados Buena Gestión vs Mala Gestión</h2>
       <div
         css={css`
           display: block;
