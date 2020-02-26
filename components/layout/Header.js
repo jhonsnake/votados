@@ -46,7 +46,7 @@ const Header = () => {
             `}
           >
             <Link href="/">
-              <Logo>Votados</Logo>
+              <Logo>Califica</Logo>
             </Link>
 
             <Buscar />

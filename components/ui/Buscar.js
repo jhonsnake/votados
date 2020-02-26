@@ -46,7 +46,7 @@ function Buscar() {
     >
       <InputText
         type="text"
-        placeholder="Buscar servidor..."
+        placeholder="Buscar alcalde o gobernador..."
         onChange={e => guardarBusqueda(e.target.value)}
       />
       <InputSubmit type="submit"></InputSubmit>

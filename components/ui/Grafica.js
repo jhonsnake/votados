@@ -10,34 +10,39 @@ const Grafica = ({ servidor }) => {
   const votosPositivos = [
     {
       x: "Salud",
-      y:
+      y: Math.floor(
         (servidor.votos_salud_mas * 100) /
-        (servidor.votos_salud_mas + servidor.votos_salud_menos)
+          (servidor.votos_salud_mas + servidor.votos_salud_menos)
+      )
     },
     {
       x: "Educación",
-      y:
+      y: Math.floor(
         (servidor.votos_educacion_mas * 100) /
-        (servidor.votos_educacion_mas + servidor.votos_educacion_menos)
+          (servidor.votos_educacion_mas + servidor.votos_educacion_menos)
+      )
     },
     {
       x: "Infraestructura",
-      y:
+      y: Math.floor(
         (servidor.votos_infraestructura_mas * 100) /
-        (servidor.votos_infraestructura_mas +
-          servidor.votos_infraestructura_menos)
+          (servidor.votos_infraestructura_mas +
+            servidor.votos_infraestructura_menos)
+      )
     },
     {
       x: "Vivienda",
-      y:
+      y: Math.floor(
         (servidor.votos_vivienda_mas * 100) /
-        (servidor.votos_vivienda_mas + servidor.votos_vivienda_menos)
+          (servidor.votos_vivienda_mas + servidor.votos_vivienda_menos)
+      )
     },
     {
       x: "Cultura",
-      y:
+      y: Math.floor(
         (servidor.votos_cultura_mas * 100) /
-        (servidor.votos_cultura_mas + servidor.votos_cultura_menos)
+          (servidor.votos_cultura_mas + servidor.votos_cultura_menos)
+      )
     },
     {
       x: "Corrupción",
@@ -48,34 +53,39 @@ const Grafica = ({ servidor }) => {
   const votosNegativos = [
     {
       x: "Salud",
-      y:
+      y: Math.floor(
         (servidor.votos_salud_menos * 100) /
-        (servidor.votos_salud_mas + servidor.votos_salud_menos)
+          (servidor.votos_salud_mas + servidor.votos_salud_menos)
+      )
     },
     {
       x: "Educación",
-      y:
+      y: Math.floor(
         (servidor.votos_educacion_menos * 100) /
-        (servidor.votos_educacion_mas + servidor.votos_educacion_menos)
+          (servidor.votos_educacion_mas + servidor.votos_educacion_menos)
+      )
     },
     {
       x: "Infraestructura",
-      y:
+      y: Math.floor(
         (servidor.votos_infraestructura_menos * 100) /
-        (servidor.votos_infraestructura_mas +
-          servidor.votos_infraestructura_menos)
+          (servidor.votos_infraestructura_mas +
+            servidor.votos_infraestructura_menos)
+      )
     },
     {
       x: "Vivienda",
-      y:
+      y: Math.floor(
         (servidor.votos_vivienda_menos * 100) /
-        (servidor.votos_vivienda_mas + servidor.votos_vivienda_menos)
+          (servidor.votos_vivienda_mas + servidor.votos_vivienda_menos)
+      )
     },
     {
       x: "Cultura",
-      y:
+      y: Math.floor(
         (servidor.votos_cultura_menos * 100) /
-        (servidor.votos_cultura_mas + servidor.votos_cultura_menos)
+          (servidor.votos_cultura_mas + servidor.votos_cultura_menos)
+      )
     },
 
     {
@@ -86,7 +96,7 @@ const Grafica = ({ servidor }) => {
 
   return (
     <div>
-      <h2>Resultados Mala Gestión vs Buena Gestión</h2>
+      <h2>Resultados Buena Gestión vs Buena Mala</h2>
       <div
         css={css`
           display: block;
