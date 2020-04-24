@@ -20,6 +20,18 @@ const Nav = styled.nav`
 function Navegacion() {
   const { usuario } = useContext(FirebaseContext);
 
+  const checkUserAdmin = () => {
+    if (usuario) {
+      if (
+        usuario.uid == "OvrGmqU16aMSh25fVBH3DRhQMND2" ||
+        usuario.uid == "Dmpw0yxeszdkaqradIRgdOLRviu2"
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <Nav>
       <Link href="/">
@@ -28,7 +40,8 @@ function Navegacion() {
       <Link href="/populares">
         <a>Mas tomates</a>
       </Link>
-      {usuario && (
+
+      {checkUserAdmin() && (
         <Link href="/agregar-servidor">
           <a>+</a>
         </Link>

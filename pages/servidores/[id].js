@@ -73,14 +73,14 @@ const ConteoVotos = styled.p`
   font-size: 12px;
   text-align: center;
   margin: 5px 0;
-  color: ${props => props.color};
+  color: ${(props) => props.color};
 `;
 const BotonVotar = styled.button`
   width: 4rem;
   height: 4rem;
   background: none;
   margin: 0 10px;
-  background-image: url(${props => props.icon});
+  background-image: url(${(props) => props.icon});
   background-repeat: no-repeat;
   background-position: center;
   &:hover {
@@ -104,7 +104,7 @@ function Servidor() {
   const [error, guardarError] = useState(false);
   const [ejecutarGif, setEjecutarGif] = useState({
     play: false,
-    url: ""
+    url: "",
   });
 
   const [comentario, guardarComentario] = useState({});
@@ -115,9 +115,9 @@ function Servidor() {
 
   const router = useRouter();
   const {
-    query: { id }
+    query: { id },
   } = router;
-  const scrollToRef = ref => window.scrollTo(0, ref.current.offsetTop);
+  const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
   const servidorAvatar = useRef();
   const AudioBooRef = useRef();
   const AudioAplausosRef = useRef();
@@ -169,7 +169,7 @@ function Servidor() {
     haVotadoInfraestructura,
     haVotadoVivienda,
     haVotadoCultura,
-    haVotadoCorrupcion
+    haVotadoCorrupcion,
   } = servidor;
 
   //Administrar y validar los votos
@@ -194,17 +194,15 @@ function Servidor() {
     const nuevoHaVotadoSalud = [...haVotadoSalud, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_salud_mas: totalSaludMas,
-        haVotadoSalud: nuevoHaVotadoSalud
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_salud_mas: totalSaludMas,
+      haVotadoSalud: nuevoHaVotadoSalud,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_salud_mas: totalSaludMas
+      votos_salud_mas: totalSaludMas,
+      haVotadoSalud: nuevoHaVotadoSalud,
     });
     guardarConsultarDB(true);
   };
@@ -228,17 +226,15 @@ function Servidor() {
     const nuevoHaVotadoSalud = [...haVotadoSalud, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_salud_menos: totalSaludMenos,
-        haVotadoSalud: nuevoHaVotadoSalud
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_salud_menos: totalSaludMenos,
+      haVotadoSalud: nuevoHaVotadoSalud,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_salud_menos: totalSaludMenos
+      votos_salud_menos: totalSaludMenos,
+      haVotadoSalud: nuevoHaVotadoSalud,
     });
     guardarConsultarDB(true);
   };
@@ -263,17 +259,15 @@ function Servidor() {
     const nuevoHaVotadoEducacion = [...haVotadoEducacion, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_educacion_mas: totalEducacionMas,
-        haVotadoEducacion: nuevoHaVotadoEducacion
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_educacion_mas: totalEducacionMas,
+      haVotadoEducacion: nuevoHaVotadoEducacion,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_educacion_mas: totalEducacionMas
+      votos_educacion_mas: totalEducacionMas,
+      haVotadoEducacion: nuevoHaVotadoEducacion,
     });
     guardarConsultarDB(true);
   };
@@ -296,17 +290,15 @@ function Servidor() {
     const nuevoHaVotadoEducacion = [...haVotadoEducacion, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_educacion_menos: totalEducacionMenos,
-        haVotadoEducacion: nuevoHaVotadoEducacion
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_educacion_menos: totalEducacionMenos,
+      haVotadoEducacion: nuevoHaVotadoEducacion,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_educacion_menos: totalEducacionMenos
+      votos_educacion_menos: totalEducacionMenos,
+      haVotadoEducacion: nuevoHaVotadoEducacion,
     });
     guardarConsultarDB(true);
   };
@@ -330,21 +322,19 @@ function Servidor() {
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoInfraestructura = [
       ...haVotadoInfraestructura,
-      usuario.uid
+      usuario.uid,
     ];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_infraestructura_mas: totalInfraestructuraMas,
-        haVotadoInfraestructura: nuevoHaVotadoInfraestructura
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_infraestructura_mas: totalInfraestructuraMas,
+      haVotadoInfraestructura: nuevoHaVotadoInfraestructura,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_infraestructura_mas: totalInfraestructuraMas
+      votos_infraestructura_mas: totalInfraestructuraMas,
+      haVotadoInfraestructura: nuevoHaVotadoInfraestructura,
     });
     guardarConsultarDB(true);
   };
@@ -366,21 +356,19 @@ function Servidor() {
     //Guardar el id del usuario que ha votado
     const nuevoHaVotadoInfraestructura = [
       ...haVotadoInfraestructura,
-      usuario.uid
+      usuario.uid,
     ];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_infraestructura_menos: totalInfraestructuraMenos,
-        haVotadoInfraestructura: nuevoHaVotadoInfraestructura
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_infraestructura_menos: totalInfraestructuraMenos,
+      haVotadoInfraestructura: nuevoHaVotadoInfraestructura,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_infraestructura_menos: totalInfraestructuraMenos
+      votos_infraestructura_menos: totalInfraestructuraMenos,
+      haVotadoInfraestructura: nuevoHaVotadoInfraestructura,
     });
     guardarConsultarDB(true);
   };
@@ -404,17 +392,15 @@ function Servidor() {
     const nuevoHaVotadoVivienda = [...haVotadoVivienda, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_vivienda_mas: totalViviendaMas,
-        haVotadoVivienda: nuevoHaVotadoVivienda
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_vivienda_mas: totalViviendaMas,
+      haVotadoVivienda: nuevoHaVotadoVivienda,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_vivienda_mas: totalViviendaMas
+      votos_vivienda_mas: totalViviendaMas,
+      haVotadoVivienda: nuevoHaVotadoVivienda,
     });
     guardarConsultarDB(true);
   };
@@ -437,17 +423,15 @@ function Servidor() {
     const nuevoHaVotadoVivienda = [...haVotadoVivienda, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_vivienda_menos: totalViviendaMenos,
-        haVotadoVivienda: nuevoHaVotadoVivienda
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_vivienda_menos: totalViviendaMenos,
+      haVotadoVivienda: nuevoHaVotadoVivienda,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_vivienda_menos: totalViviendaMenos
+      votos_vivienda_menos: totalViviendaMenos,
+      haVotadoVivienda: nuevoHaVotadoVivienda,
     });
     guardarConsultarDB(true);
   };
@@ -471,17 +455,15 @@ function Servidor() {
     const nuevoHaVotadoCultura = [...haVotadoCultura, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_cultura_mas: totalCulturaMas,
-        haVotadoCultura: nuevoHaVotadoCultura
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_cultura_mas: totalCulturaMas,
+      haVotadoCultura: nuevoHaVotadoCultura,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_cultura_mas: totalCulturaMas
+      votos_cultura_mas: totalCulturaMas,
+      haVotadoCultura: nuevoHaVotadoCultura,
     });
     guardarConsultarDB(true);
   };
@@ -504,17 +486,15 @@ function Servidor() {
     const nuevoHaVotadoCultura = [...haVotadoCultura, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_cultura_menos: totalCulturaMenos,
-        haVotadoCultura: nuevoHaVotadoCultura
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_cultura_menos: totalCulturaMenos,
+      haVotadoCultura: nuevoHaVotadoCultura,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_cultura_menos: totalCulturaMenos
+      votos_cultura_menos: totalCulturaMenos,
+      haVotadoCultura: nuevoHaVotadoCultura,
     });
     guardarConsultarDB(true);
   };
@@ -539,17 +519,15 @@ function Servidor() {
     const nuevoHaVotadoCorrupcion = [...haVotadoCorrupcion, usuario.uid];
 
     //Actualizar en la BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        votos_corrupcion_menos: totalCorrupcionMenos,
-        haVotadoCorrupcion: nuevoHaVotadoCorrupcion
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      votos_corrupcion_menos: totalCorrupcionMenos,
+      haVotadoCorrupcion: nuevoHaVotadoCorrupcion,
+    });
     //Actualizar el State
     guardarServidor({
       ...servidor,
-      votos_corrupcion_menos: totalCorrupcionMenos
+      votos_corrupcion_menos: totalCorrupcionMenos,
+      haVotadoCorrupcion: nuevoHaVotadoCorrupcion,
     });
     guardarConsultarDB(true);
   };
@@ -563,11 +541,11 @@ function Servidor() {
     AudioBooRef.current.play();
     setEjecutarGif({
       play: false,
-      url: ""
+      url: "",
     });
     setEjecutarGif({
       play: true,
-      url: "/static/img/tomatogif.gif?a=" + Math.random()
+      url: "/static/img/tomatogif.gif?a=" + Math.random(),
     });
   }
 
@@ -580,39 +558,39 @@ function Servidor() {
     AudioAplausosRef.current.play();
     setEjecutarGif({
       play: false,
-      url: ""
+      url: "",
     });
     setEjecutarGif({
       play: true,
-      url: "/static/img/aplausosgif.gif?a=" + Math.random()
+      url: "/static/img/aplausosgif.gif?a=" + Math.random(),
     });
 
     setTimeout(() => {
       setEjecutarGif({
         play: false,
-        url: ""
+        url: "",
       });
     }, 5000);
   }
 
   //Crear comentarios
 
-  const comentarioChange = e => {
+  const comentarioChange = (e) => {
     guardarComentario({
       ...comentario,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   //Identifica si el comentario pertenece al creador del producto
 
-  const esCreador = id => {
+  const esCreador = (id) => {
     if (creador.id == id) {
       return true;
     }
   };
 
-  const agregarComentario = e => {
+  const agregarComentario = (e) => {
     e.preventDefault();
     if (!usuario) {
       return router.push("/login");
@@ -631,12 +609,9 @@ function Servidor() {
     const nuevosComentarios = [...comentarios, comentario];
 
     //Actualizar BD
-    firebase.db
-      .collection("servidores")
-      .doc(id)
-      .update({
-        comentarios: nuevosComentarios
-      });
+    firebase.db.collection("servidores").doc(id).update({
+      comentarios: nuevosComentarios,
+    });
 
     //Actualizar State
     guardarServidor({ ...servidor, comentarios: nuevosComentarios });
@@ -666,15 +641,14 @@ function Servidor() {
       return router.push("/login");
     }
     try {
-      await firebase.db
-        .collection("servidores")
-        .doc(id)
-        .delete();
+      await firebase.db.collection("servidores").doc(id).delete();
       router.push("/");
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log(servidor);
 
   return (
     <Layout>
