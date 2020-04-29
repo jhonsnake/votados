@@ -8,13 +8,21 @@ import Boton from "../ui/Boton";
 import { FirebaseContext } from "../../firebase/";
 
 const ContenedorHeader = styled.div`
+  display: flex;
   max-width: 1200px;
   width: 95%;
   margin: 0 auto;
-  @media (min-width: 768px) {
-    display: flex;
-    justify-content: space-between;
-  }
+  align-items: center;
+  margin-top: 30px;
+`;
+
+const ContenedorUsuario = styled.div`
+  display: flex;
+  max-width: 1200px;
+  width: 95%;
+  margin: 0 auto;
+
+  margin-top: 30px;
 `;
 
 const Logo = styled.a`
@@ -86,18 +94,22 @@ const Header = () => {
               <Logo>Califica</Logo>
             </Link>
 
-            <Buscar />
             <Navegacion />
           </div>
+        </ContenedorHeader>
+        <ContenedorHeader>
+          <Buscar />
+        </ContenedorHeader>
+        <ContenedorUsuario>
           <div
             css={css`
               display: flex;
-              align-items: center;
+              align-items: end;
             `}
           >
             {checkUser()}
           </div>
-        </ContenedorHeader>
+        </ContenedorUsuario>
       </header>
     </div>
   );

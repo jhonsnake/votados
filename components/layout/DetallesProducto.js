@@ -12,17 +12,14 @@ const Servidor = styled.li`
   border-bottom: 1px solid #e1e1e1;
 `;
 
-const DescripcionServidor = styled.div`
-  flex: 0 1 600px;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  column-gap: 2rem;
-`;
+const DescripcionServidor = styled.div``;
 
 const Titulo = styled.a`
   font-size: 2rem;
   font-weight: bold;
   margin: 0;
+  width: 200px;
+  display: block;
   :hover {
     cursor: pointer;
   }
@@ -98,7 +95,7 @@ function DetallesProducto({ servidor }) {
     votos_cultura_menos,
     votos_corrupcion_menos,
     comentarios,
-    creado
+    creado,
   } = servidor;
 
   return (

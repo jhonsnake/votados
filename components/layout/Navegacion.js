@@ -4,6 +4,8 @@ import styled from "@emotion/styled";
 import { FirebaseContext } from "../../firebase/";
 
 const Nav = styled.nav`
+  display: flex;
+  flex-wrap: nowrap;
   padding-left: 2rem;
   a {
     font-size: 1.8rem;

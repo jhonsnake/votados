@@ -6,7 +6,7 @@ import Router from "next/router";
 const InputText = styled.input`
   border: 1px solid var(--gris3);
   padding: 1rem;
-  min-width: 300px;
+  width: 100%;
 `;
 
 const InputSubmit = styled.button`
@@ -27,27 +27,28 @@ const InputSubmit = styled.button`
 `;
 function Buscar() {
   const [busqueda, guardarBusqueda] = useState("");
-  const buscarProducto = e => {
+  const buscarProducto = (e) => {
     e.preventDefault();
     if (busqueda.trim === "") return;
     Router.push({
       pathname: "/buscar",
       query: {
-        q: busqueda
-      }
+        q: busqueda,
+      },
     });
   };
   return (
     <form
       css={css`
         position: relative;
+        width: 100%;
       `}
       onSubmit={buscarProducto}
     >
       <InputText
         type="text"
         placeholder="Buscar alcalde o gobernador..."
-        onChange={e => guardarBusqueda(e.target.value)}
+        onChange={(e) => guardarBusqueda(e.target.value)}
       />
       <InputSubmit type="submit"></InputSubmit>
     </form>
