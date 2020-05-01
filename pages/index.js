@@ -28,7 +28,7 @@ const Home = () => {
         <div className="listado-servidores">
           <div className="contenedor">
             <Mensaje>
-              <p>Vote y opine sobre la gestión de sus servidores publicos.</p>
+              <p>Vote y opine sobre la gestión de sus servidores públicos.</p>
               <Boton
                 onClick={() => {
                   setAviso(!aviso);
@@ -55,7 +55,7 @@ const Home = () => {
                 <iframe
                   width="560"
                   height="315"
-                  src="https://www.youtube.com/embed/0fEOieeJoKE"
+                  src="https://www.youtube.com/embed/zuZ2a2qj3aA"
                   frameborder="0"
                   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen
