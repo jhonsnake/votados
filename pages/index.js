@@ -38,7 +38,14 @@ const Home = () => {
         <div className="listado-servidores">
           <div className="contenedor">
             <Mensaje>
-              <p>Vote y opine sobre la gestión de sus servidores públicos.</p>
+              <p>
+                Vote y opine sobre la gestión de sus servidores públicos, no es
+                necesario registrarse para votar.
+              </p>
+              <br />
+              <p>
+                Regístresepara recibir mas información sobre los resultados.
+              </p>
               <Boton
                 onClick={() => {
                   setAviso(!aviso);

@@ -109,6 +109,7 @@ function Servidor() {
 
   const [comentario, guardarComentario] = useState({});
   const [consultarDB, guardarConsultarDB] = useState(true);
+  const [ip, setIp] = useState(null);
 
   //context del firebase
   const { firebase, usuario } = useContext(FirebaseContext);
@@ -121,7 +122,15 @@ function Servidor() {
   const servidorAvatar = useRef();
   const AudioBooRef = useRef();
   const AudioAplausosRef = useRef();
+
   useEffect(() => {
+    async function getUserIp() {
+      const userIpResponse = await fetch("https://api.ipify.org?format=json	");
+      const userIp = await userIpResponse.json();
+      setIp(userIp.ip);
+    }
+
+    getUserIp();
     if (id && consultarDB) {
       const obtenerServidor = async () => {
         const productoQuery = await firebase.db
@@ -176,22 +185,14 @@ function Servidor() {
 
   //SALUD
   const VotarSaludMas = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
-
     //obtener y sumar votos salud
     const totalSaludMas = votos_salud_mas + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoSalud.includes(usuario.uid)) return;
+    if (haVotadoSalud.includes(ip)) return;
     lanzarAplauso();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoSalud = [...haVotadoSalud, usuario.uid];
+    const nuevoHaVotadoSalud = [...haVotadoSalud, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -208,22 +209,16 @@ function Servidor() {
   };
 
   const VotarSaludMenos = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos salud
     const totalSaludMenos = votos_salud_menos + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoSalud.includes(usuario.uid)) return;
+    if (haVotadoSalud.includes(ip)) return;
     lanzarTomate();
 
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoSalud = [...haVotadoSalud, usuario.uid];
+
+    const nuevoHaVotadoSalud = [...haVotadoSalud, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -242,21 +237,15 @@ function Servidor() {
   //EDUCACIÓN
 
   const VotarEducacionMas = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos salud
     const totalEducacionMas = votos_educacion_mas + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoEducacion.includes(usuario.uid)) return;
+    if (haVotadoEducacion.includes(ip)) return;
     lanzarAplauso();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoEducacion = [...haVotadoEducacion, usuario.uid];
+
+    const nuevoHaVotadoEducacion = [...haVotadoEducacion, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -273,21 +262,15 @@ function Servidor() {
   };
 
   const VotarEducacionMenos = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos Educacion
     const totalEducacionMenos = votos_educacion_menos + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoEducacion.includes(usuario.uid)) return;
+    if (haVotadoEducacion.includes(ip)) return;
     lanzarTomate();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoEducacion = [...haVotadoEducacion, usuario.uid];
+
+    const nuevoHaVotadoEducacion = [...haVotadoEducacion, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -306,24 +289,15 @@ function Servidor() {
   //INFRAESTRUCTURA
 
   const VotarInfraestructuraMas = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos salud
     const totalInfraestructuraMas = votos_infraestructura_mas + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoInfraestructura.includes(usuario.uid)) return;
+    if (haVotadoInfraestructura.includes(ip)) return;
     lanzarAplauso();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoInfraestructura = [
-      ...haVotadoInfraestructura,
-      usuario.uid,
-    ];
+
+    const nuevoHaVotadoInfraestructura = [...haVotadoInfraestructura, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -340,24 +314,15 @@ function Servidor() {
   };
 
   const VotarInfraestructuraMenos = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos Infraestructura
     const totalInfraestructuraMenos = votos_infraestructura_menos + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoInfraestructura.includes(usuario.uid)) return;
+    if (haVotadoInfraestructura.includes(ip)) return;
     lanzarTomate();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoInfraestructura = [
-      ...haVotadoInfraestructura,
-      usuario.uid,
-    ];
+
+    const nuevoHaVotadoInfraestructura = [...haVotadoInfraestructura, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -375,21 +340,15 @@ function Servidor() {
   //VIVIENDA
 
   const VotarViviendaMas = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos salud
     const totalViviendaMas = votos_vivienda_mas + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoVivienda.includes(usuario.uid)) return;
+    if (haVotadoVivienda.includes(ip)) return;
     lanzarAplauso();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoVivienda = [...haVotadoVivienda, usuario.uid];
+
+    const nuevoHaVotadoVivienda = [...haVotadoVivienda, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -406,21 +365,15 @@ function Servidor() {
   };
 
   const VotarViviendaMenos = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos Vivienda
     const totalViviendaMenos = votos_vivienda_menos + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoVivienda.includes(usuario.uid)) return;
+    if (haVotadoVivienda.includes(ip)) return;
     lanzarTomate();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoVivienda = [...haVotadoVivienda, usuario.uid];
+
+    const nuevoHaVotadoVivienda = [...haVotadoVivienda, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -438,21 +391,15 @@ function Servidor() {
   //CULTURA
 
   const VotarCulturaMas = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos salud
     const totalCulturaMas = votos_cultura_mas + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoCultura.includes(usuario.uid)) return;
+    if (haVotadoCultura.includes(ip)) return;
     lanzarAplauso();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoCultura = [...haVotadoCultura, usuario.uid];
+
+    const nuevoHaVotadoCultura = [...haVotadoCultura, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -469,21 +416,15 @@ function Servidor() {
   };
 
   const VotarCulturaMenos = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos Cultura
     const totalCulturaMenos = votos_cultura_menos + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoCultura.includes(usuario.uid)) return;
+    if (haVotadoCultura.includes(ip)) return;
     lanzarTomate();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoCultura = [...haVotadoCultura, usuario.uid];
+
+    const nuevoHaVotadoCultura = [...haVotadoCultura, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -502,21 +443,15 @@ function Servidor() {
   //CORRUPCION
 
   const VotarCorrupcionMenos = () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     //obtener y sumar votos Corrupcion
     const totalCorrupcionMenos = votos_corrupcion_menos + 1;
 
     //Verificar si el usuario actual ha votado
-    if (haVotadoCorrupcion.includes(usuario.uid)) return;
+    if (haVotadoCorrupcion.includes(ip)) return;
     lanzarTomate();
     //Guardar el id del usuario que ha votado
-    const nuevoHaVotadoCorrupcion = [...haVotadoCorrupcion, usuario.uid];
+
+    const nuevoHaVotadoCorrupcion = [...haVotadoCorrupcion, ip];
 
     //Actualizar en la BD
     firebase.db.collection("servidores").doc(id).update({
@@ -592,13 +527,6 @@ function Servidor() {
 
   const agregarComentario = (e) => {
     e.preventDefault();
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
 
     // Información extra al comentario
     comentario.usuarioId = usuario.uid;
@@ -630,13 +558,6 @@ function Servidor() {
   //elimina un servidor de la BD.
 
   const eliminarServidor = async () => {
-    if (!usuario) {
-      return router.push("/login");
-    }
-
-    if (usuario && !usuario.emailVerified) {
-      return router.push("/verificar-correo");
-    }
     if (creador.id !== usuario.uid) {
       return router.push("/login");
     }
@@ -648,7 +569,7 @@ function Servidor() {
     }
   };
 
-  console.log(servidor);
+  console.log(ip);
 
   return (
     <Layout>
